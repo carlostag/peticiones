@@ -10,7 +10,7 @@ GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 st.title("PandasAI Chatbot Peticiones Reparación")
 
 # Ruta fija del archivo Excel
-EXCEL_PATH = "Peticiones.xlsx"
+EXCEL_PATH = "peticiones.xlsx"
 
 # Carga del archivo Excel
 try:
