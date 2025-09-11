@@ -2,4 +2,4 @@ streamlit
 pandas
 langchain-groq
 pandasai
-python-dotenv
+openpyxl
