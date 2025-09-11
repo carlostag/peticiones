@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 from langchain_groq.chat_models import ChatGroq
 from pandasai import SmartDataframe
 
@@ -45,7 +46,14 @@ if user_query:
     try:
         with st.spinner("Pensando..."):
             result = df.chat(user_query)
+
         st.markdown("**Respuesta:**")
-        st.write(result)
+
+        # Si el resultado es una ruta a un archivo de imagen, mostrarlo como imagen
+        if isinstance(result, str) and result.lower().endswith((".png", ".jpg", ".jpeg")) and os.path.exists(result):
+            st.image(result)
+        else:
+            st.write(result)
+
     except Exception as e:
         st.error(f"Error al procesar la consulta: {str(e)}")
