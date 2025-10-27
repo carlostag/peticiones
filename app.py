@@ -38,14 +38,23 @@ except Exception as e:
 try:
     llm = OpenAI(
         api_token=GROQ_API_KEY,
-        model="llama3-70b-8192",  # Modelo soportado por Groq
+        model="llama3-8b-8192",  # Cambiado a un modelo alternativo soportado
         api_base="https://api.groq.com/openai/v1"
     )
     st.success("🧠 Modelo Groq inicializado correctamente (vía OpenAI wrapper).")
 except Exception as e:
     st.error(f"❌ Error al inicializar el modelo Groq: {str(e)}")
-    st.error("Modelos soportados por Groq incluyen: 'llama3-70b-8192', 'llama3-8b-8192', 'mixtral-8x7b-32768', 'gemma-7b-it'. Por favor, actualiza el nombre del modelo.")
-    st.stop()
+    st.error("Modelos soportados por Groq: 'llama3-8b-8192', 'mixtral-8x7b-32768', 'gemma-7b-it'. Intentando con el SDK nativo de Groq...")
+    
+    # Intento con Groq SDK como respaldo
+    try:
+        from pandasai.llm import Groq
+        llm = Groq(api_key=GROQ_API_KEY, model="llama3-8b-8192")
+        st.success("🧠 Modelo Groq inicializado correctamente con SDK nativo.")
+    except Exception as e2:
+        st.error(f"❌ Error al inicializar con Groq SDK: {str(e2)}")
+        st.error("Por favor, verifica tu clave API y la configuración del modelo en https://console.groq.com.")
+        st.stop()
 
 # -------------------------------------------------
 # CREACIÓN DEL SMART DATAFRAME
