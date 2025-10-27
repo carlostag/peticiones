@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 from pandasai import SmartDataframe
-from pandasai.llm import Groq
+from pandasai.llm import OpenAI
 
 # -------------------------------------------------
 # CONFIGURACIÓN DE LA APP
@@ -29,14 +29,15 @@ except Exception as e:
     st.stop()
 
 # -------------------------------------------------
-# INICIALIZACIÓN DEL MODELO LLM (GROQ)
+# INICIALIZACIÓN DEL MODELO LLM (GROQ vía OpenAI wrapper)
 # -------------------------------------------------
 try:
-    llm = Groq(
-        api_key=GROQ_API_KEY,
-        model="llama-3.3-70b-versatile"
+    llm = OpenAI(
+        api_token=GROQ_API_KEY,
+        model="llama-3.3-70b-versatile",
+        api_base="https://api.groq.com/openai/v1"
     )
-    st.success("🧠 Modelo Groq inicializado correctamente.")
+    st.success("🧠 Modelo Groq inicializado correctamente (vía OpenAI wrapper).")
 except Exception as e:
     st.error(f"❌ Error al inicializar el modelo Groq: {str(e)}")
     st.stop()
@@ -65,7 +66,6 @@ if user_query:
 
         st.markdown("### 🧾 **Respuesta:**")
 
-        # Si devuelve una imagen, mostrarla
         if isinstance(result, str) and result.lower().endswith((".png", ".jpg", ".jpeg")) and os.path.exists(result):
             st.image(result)
         else:
