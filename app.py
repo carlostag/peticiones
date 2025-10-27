@@ -9,7 +9,11 @@ from pandasai.llm import OpenAI
 # -------------------------------------------------
 
 # Clave API desde Streamlit Secrets
-GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+try:
+    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+except KeyError:
+    st.error("❌ No se encontró la clave API en Streamlit Secrets. Asegúrate de configurar 'GROQ_API_KEY'.")
+    st.stop()
 
 # Título de la aplicación
 st.title("🤖 PandasAI Chatbot - Peticiones de Reparación")
@@ -34,12 +38,13 @@ except Exception as e:
 try:
     llm = OpenAI(
         api_token=GROQ_API_KEY,
-        model="llama-3.3-70b-versatile",
+        model="llama3-70b-8192",  # Modelo soportado por Groq
         api_base="https://api.groq.com/openai/v1"
     )
     st.success("🧠 Modelo Groq inicializado correctamente (vía OpenAI wrapper).")
 except Exception as e:
     st.error(f"❌ Error al inicializar el modelo Groq: {str(e)}")
+    st.error("Modelos soportados por Groq incluyen: 'llama3-70b-8192', 'llama3-8b-8192', 'mixtral-8x7b-32768', 'gemma-7b-it'. Por favor, actualiza el nombre del modelo.")
     st.stop()
 
 # -------------------------------------------------
